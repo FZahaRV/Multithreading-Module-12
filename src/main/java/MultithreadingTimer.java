@@ -1,21 +1,20 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 public class MultithreadingTimer {
+    private int n;
     private final AtomicBoolean stop = new AtomicBoolean(false);
 
-    public void multithreadingTimer() {
+    public void multithreadingTimer(int n) {
+        this.n = n;
         Thread timerThread = new Thread(this::timer);
         Thread fiveSecTimerThread = new Thread(this::fiveSecTimer);
         timerThread.start();
         fiveSecTimerThread.start();
     }
     public void timer() {
-        while (!stop.get()) {
             Stream<Integer> t = Stream.iterate(1, i -> i + 1)
+                    .limit(n)
                     .peek(i -> {
                         try {
                             Thread.sleep(1000);
@@ -24,7 +23,7 @@ public class MultithreadingTimer {
                         }
                     });
             t.filter(i -> i != 5).forEach(System.out::println);
-        }
+            stop.set(true);
     }
     public void fiveSecTimer() {
         while (!stop.get()) {

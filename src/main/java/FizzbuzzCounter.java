@@ -1,4 +1,3 @@
-
 class FizzbuzzCounter {
     Thread A = new Thread(this::fizz);
     Thread B = new Thread(this::buzz);
